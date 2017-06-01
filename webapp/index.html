@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <title>Pulp - v0.1</title>
+
+  <!-- CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+  <body>
+
+  <!-- NAVBAR -->
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Pulp</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a id="contact-link" href="#">Settings</a></li>
+      </ul>
+
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a id="contact-link-side" href="#">Settings</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="container">
+    <div class="row">
+      
+      <!-- CUISINE PREF -->
+      <div class="col s4">
+        <h4>Preferences</h4>
+        <div class="divider"></div>
+
+        <br>
+        <h5>Whitelist</h5>
+        <div class="chips chips-wlist"></div>
+
+        <br><br><br><br><br><br>
+        <h5>Blacklist</h5>
+        <div class="chips chips-blist"></div>
+      
+      </div>
+      
+      <!-- LOGISTIC PREF -->
+      <div class="col s4">
+        <h4>Convenience</h4>
+        <div class="divider"></div>
+        
+        <br>
+        <h5>Time and Location</h5>
+
+        <!-- OPEN NOW -->
+        <div class="switch">
+          <label>
+            
+            <input type="checkbox">
+            <span class="lever"></span>
+            Open Now
+          </label>
+        </div>
+
+        <!-- WALKING DISTANCE -->
+        <div class="switch">
+          <label>
+            
+            <input type="checkbox">
+            <span class="lever"></span>
+            Within walking distance
+          </label>
+        </div>
+
+        <br><br>
+        <!-- Max distance -->
+        <p id="max_d">Max distance: </p>
+        <p class="range-field">
+          <input type="range" id="max_dist" min="0" max="100" />
+        </p>
+
+        <br><br><br><br>
+        <h5>Price and Value</h5>
+
+        <!-- PRICE -->
+        <p>
+          <input type="checkbox" id="$" />
+          <label for="$">$</label>
+        </p>
+        <p>
+          <input type="checkbox" id="$$" />
+          <label for="$$">$$</label>
+        </p>
+        <p>
+          <input type="checkbox" id="$$$" />
+          <label for="$$$">$$$</label>
+        </p>
+        <p>
+          <input type="checkbox" id="$$$$" />
+          <label for="$$$$">$$$$</label>
+        </p>
+
+        <br>
+        <!-- DEALS -->
+        <div class="switch">
+          <label>
+            
+            <input type="checkbox">
+            <span class="lever"></span>
+            Deals
+          </label>
+        </div>
+
+        
+      </div>
+      
+      <!-- FOOD CHOICES -->
+      
+      <div class="col s4">
+        <h4>Best Options</h4>
+        <div class="divider"></div>
+        <div class="card small">
+          <div class="card-image">
+            <img src="https://media.timeout.com/images/102945700/image.jpg">
+            <span class="card-title">The Grill</span>
+          </div>
+          <div class="card-content">
+            <p>Restuarant description</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Make a Reservation</a>
+          </div>
+        </div>
+        <div class="card small">
+          <div class="card-image">
+            <img src="http://assets.simplyrecipes.com/wp-content/uploads/2015/04/chicken-fajitas-horiz-a-1200.jpg">
+            <span class="card-title">The Chicken Den</span>
+          </div>
+          <div class="card-content">
+            <p>Restuarant description</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Make a Reservation</a>
+          </div>
+        </div>
+        <div class="card small">
+          <div class="card-image">
+            <img src="https://static01.nyt.com/images/2016/11/29/dining/recipelab-chick-noodle-still/recipelab-chick-noodle-still-videoSixteenByNineJumbo1600.jpg">
+            <span class="card-title">The Soup Place</span>
+          </div>
+          <div class="card-content">
+            <p>Restuarant description</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Make a Reservation</a>
+          </div>
+        </div>
+      
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+  </body>
+</html>
