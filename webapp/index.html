@@ -34,33 +34,44 @@
     <div class="row">
       
       <!-- CUISINE PREF -->
-      <div class="col s4">
-        <h4>Preferences</h4>
-        <div class="divider"></div>
+      <div id='preferences' class="col s4">
 
         <br>
-        <h5>Whitelist</h5>
-        <div class="chips chips-wlist"></div>
+        <h5>I want</h5>
+        <div id='wlist' class="chips chips-wlist"></div>
 
-        <br><br><br><br><br><br>
-        <h5>Blacklist</h5>
-        <div class="chips chips-blist"></div>
-      
-      </div>
-      
-      <!-- LOGISTIC PREF -->
-      <div class="col s4">
-        <h4>Convenience</h4>
-        <div class="divider"></div>
-        
+        <h5>I don't want</h5>
+        <div id='blist' class="chips chips-blist"></div>
+
         <br>
-        <h5>Time and Location</h5>
+
+        <!-- PRICE -->
+        <div id='price'>
+          <p>
+            <input type="checkbox" id="$" />
+            <label for="$">$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="$$" />
+            <label for="$$">$$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="$$$" />
+            <label for="$$$">$$$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="$$$$" />
+            <label for="$$$$">$$$$</label>
+          </p>
+        </div>
+
+        <br>
 
         <!-- OPEN NOW -->
         <div class="switch">
           <label>
             
-            <input type="checkbox">
+            <input id="open_now" type="checkbox">
             <span class="lever"></span>
             Open Now
           </label>
@@ -75,36 +86,7 @@
             Within walking distance
           </label>
         </div>
-
-        <br><br>
-        <!-- Max distance -->
-        <p id="max_d">Max distance: </p>
-        <p class="range-field">
-          <input type="range" id="max_dist" min="0" max="100" />
-        </p>
-
-        <br><br><br><br>
-        <h5>Price and Value</h5>
-
-        <!-- PRICE -->
-        <p>
-          <input type="checkbox" id="$" />
-          <label for="$">$</label>
-        </p>
-        <p>
-          <input type="checkbox" id="$$" />
-          <label for="$$">$$</label>
-        </p>
-        <p>
-          <input type="checkbox" id="$$$" />
-          <label for="$$$">$$$</label>
-        </p>
-        <p>
-          <input type="checkbox" id="$$$$" />
-          <label for="$$$$">$$$$</label>
-        </p>
-
-        <br>
+        
         <!-- DEALS -->
         <div class="switch">
           <label>
@@ -115,14 +97,22 @@
           </label>
         </div>
 
-        
+        <!-- Zagat -->
+        <div class="switch">
+          <label>
+            
+            <input type="checkbox">
+            <span class="lever"></span>
+            Zagat only
+          </label>
+        </div>
+      
       </div>
       
       <!-- FOOD CHOICES -->
       
       <div class="col s4">
-        <h4>Best Options</h4>
-        <div class="divider"></div>
+        
         <div class="card small">
           <div class="card-image">
             <img src="https://media.timeout.com/images/102945700/image.jpg">
@@ -147,10 +137,27 @@
             <a href="#">Make a Reservation</a>
           </div>
         </div>
+      
+      </div>
+
+      <div class="col s4">
+        
         <div class="card small">
           <div class="card-image">
-            <img src="https://static01.nyt.com/images/2016/11/29/dining/recipelab-chick-noodle-still/recipelab-chick-noodle-still-videoSixteenByNineJumbo1600.jpg">
-            <span class="card-title">The Soup Place</span>
+            <img src="https://media.timeout.com/images/102945700/image.jpg">
+            <span class="card-title">The Grill</span>
+          </div>
+          <div class="card-content">
+            <p>Restuarant description</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Make a Reservation</a>
+          </div>
+        </div>
+        <div class="card small">
+          <div class="card-image">
+            <img src="http://assets.simplyrecipes.com/wp-content/uploads/2015/04/chicken-fajitas-horiz-a-1200.jpg">
+            <span class="card-title">The Chicken Den</span>
           </div>
           <div class="card-content">
             <p>Restuarant description</p>
