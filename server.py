@@ -1,5 +1,5 @@
 # FLASK
-from flask import Flask
+from flask import Flask, jsonify, request
 from key import *
 app = Flask(__name__)
 
@@ -27,18 +27,24 @@ def hello():
     search_results = yelp_api.search_query(latitude=my_lat, longitude=my_long, term="restaurants", limit=1)
     return str(search_results)
 
-@app.route("/<q>")
+@app.route("/<q>", methods=['GET'])
 def query(q):
-	q = test_query #json.loads(q)
+
+	query = json.loads(request.args.get('query'))
+	print(query)
+
+
+	q = query #json.loads(q)
 	results = yelp_api.search_query(latitude=q['lat'], 
 									longitude=q['long'],
 									price=q['price'],
 									open_now=q['open_now'],
 									term='restaurants',
-									categories=",".join(q['like']),
-									limit=1
+									categories=",".join(q['like'])
 									)
-	return str(results)
+	response = jsonify(results)
+	response.headers.add('Access-Control-Allow-Origin', '*')
+	return response
 
 
 if __name__ == "__main__":

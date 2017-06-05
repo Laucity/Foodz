@@ -7,29 +7,29 @@
 })(jQuery); // end of jQuery name space
 
 
-var lat;
-var long;
-
-function savePosition(position) {
-    lat = position.coords.latitude;
-    long = position.coords.longitude;
-}
-
 
 $(document).ready(function() {
 	
     Materialize.updateTextFields();
 
-    navigator.geolocation.getCurrentPosition(savePosition);
 
     var query = {
-        'lat': lat,
-        'long': long,
+        'lat': 37.868654,
+        'long': -122.259153,
         'like': [],
         'dislike': [],
         'open_now': '',
         'price': [],
     };
+
+
+    function savePosition(position) {
+        console.log("YO");
+        console.log(typeof(position.coords.latitude));
+        query.lat = position.coords.latitude;
+        query.long = position.coords.longitude;
+    }
+    navigator.geolocation.getCurrentPosition(savePosition);
 
     var cuisine_options = {
         'thai': null,
@@ -89,7 +89,16 @@ $(document).ready(function() {
     });
 
     $('#preferences').change(function () {
+
+        var server_url = 'http://127.0.0.1:5000/query';
         // send query
+        $.get(server_url, {query: JSON.stringify(query)}, function (response, status) {
+            if (status === "success") {
+                console.log(response);
+            } else {
+
+            }
+        }, 'json');
         // update stuff
     });
 
