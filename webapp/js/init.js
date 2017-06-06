@@ -16,7 +16,7 @@ String.prototype.supplant = function (o) {
 };
 
 function buildCard(dict) {
-    var template = "<div class=\"card small\"><div class=\"card-image\"><img src=\"{image_url}\"><span class=\"card-title\"></span></div><div class=\"card-content\"><p>{name}</p></div><div class=\"card-action\"><a href=\"#\">Make a Reservation</a></div></div>";
+    var template = "<div class=\"card small\"><div class=\"card-image\"><img src=\"{image_url}\"><span class=\"card-title\"></span></div><div class=\"card-content\"><p>{name}</p></div><div class=\"card-action\"><a href=\"#\">{rating}</a></div></div>";
     return template.supplant(dict);
 }
 
@@ -55,7 +55,8 @@ $(document).ready(function() {
         'like': [],
         'dislike': [],
         'open_now': false,
-        'price': ["1","2","3","4"]
+        'price': ["1","2","3","4"],
+        'radius': 1000
     };
 
 
@@ -117,6 +118,11 @@ $(document).ready(function() {
 
     $('.chips-blist').on('chip.delete', function(e, chip){
         query.dislike.splice(query.dislike.indexOf(chip.tag), 1);
+        queryServer(query);
+    });
+
+    $('#walk').change(function () {
+        query.radius = 900;
         queryServer(query);
     });
 

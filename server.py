@@ -40,7 +40,7 @@ def query(q):
 									price=",".join(q['price']),
 									open_now=q['open_now'],
 									term='restaurants',
-									categories=",".join(q['like'])
+									categories=",".join(q['like']),
 									)
 	response = jsonify(results)
 	response.headers.add('Access-Control-Allow-Origin', '*')
