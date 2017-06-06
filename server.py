@@ -37,7 +37,7 @@ def query(q):
 	q = query #json.loads(q)
 	results = yelp_api.search_query(latitude=q['lat'], 
 									longitude=q['long'],
-									price=q['price'],
+									price=",".join(q['price']),
 									open_now=q['open_now'],
 									term='restaurants',
 									categories=",".join(q['like'])
