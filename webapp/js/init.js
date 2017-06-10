@@ -6,19 +6,143 @@
     }); // end of document ready
 })(jQuery); // end of jQuery name space
 
-String.prototype.supplant = function (o) {
-    return this.replace(/{([^{}]*)}/g,
-        function (a, b) {
-            var r = o[b];
-            return typeof r === 'string' || typeof r === 'number' ? r : a;
-        }
-    );
-};
+Vue.component('navbar', {
+    template: `
 
-function buildCard(dict) {
-    var template = "<div class=\"card small\"><div class=\"card-image\"><img src=\"{image_url}\"><span class=\"card-title\"></span></div><div class=\"card-content\"><p>{name}</p></div><div class=\"card-action\"><a href=\"#\">{rating}</a></div></div>";
-    return template.supplant(dict);
-}
+      <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+          <a id="logo-container" href="#" class="brand-logo">Pulp</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a id="contact-link" href="#">Settings</a></li>
+          </ul>
+
+
+          <ul id="nav-mobile" class="side-nav">
+            <li><a id="contact-link-side" href="#">Settings</a></li>
+          </ul>
+          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
+    `
+})
+
+Vue.component('preference', {
+    template: `
+
+      <div id='preferences' class="col s4">
+
+        <br>
+        <h5>I want</h5>
+        <div id='wlist' class="chips chips-wlist"></div>
+
+        <h5>I don't want</h5>
+        <div id='blist' class="chips chips-blist"></div>
+
+        <br>
+
+        <!-- PRICE -->
+        <div id='price'>
+          <p>
+            <input type="checkbox" id="1" checked="checked" />
+            <label for="1">$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="2" checked="checked" />
+            <label for="2">$$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="3" checked="checked" />
+            <label for="3">$$$</label>
+          </p>
+          <p>
+            <input type="checkbox" id="4" checked="checked" />
+            <label for="4">$$$$</label>
+          </p>
+        </div>
+
+        <br>
+
+        <!-- WALKING DISTANCE -->
+        <div class="switch">
+          <label>
+            
+            <input id="walk" type="checkbox">
+            <span class="lever"></span>
+            Within walking distance
+          </label>
+        </div>
+      
+      </div>
+
+    `
+})
+
+Vue.component('card', {
+    template: `
+
+    <div class="card small">
+        <div class="card-image">
+            <img :src="image_url">
+            <span class="card-title"></span>
+        </div>
+        <div class="card-content">
+            <p>{{ name }}</p>
+        </div>
+        <div class="card-action">
+            <a href="#">{{ rating }}</a>
+        </div>
+    </div>
+
+    `,
+
+    data: () => {
+        return {
+            image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/XwiV9HD8LRciCYCANDsUbA/o.jpg",
+            name: "OMG RESTAURANT",
+            rating: 3
+        }
+    }
+})
+
+Vue.component('results', {
+    template: `
+
+      <div class="col s4">
+        <card></card>
+      
+      </div>
+
+    `
+})
+
+Vue.component('main-view', {
+    template: `
+
+    <div class="container">
+        <div class="row">
+            <preference></preference>
+            <results></results>
+        </div>
+    </div>
+
+    `
+})
+
+Vue.component('app', {
+    template: `
+  
+    <div>
+      <navbar></navbar>
+      <main-view></main-view>
+    </div>
+  
+    `
+})
+
+// create a root instance
+new Vue({
+  el: '#root'
+})
 
 function queryServer(q) {
     var server_url = 'http://127.0.0.1:5000/query';
