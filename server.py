@@ -24,7 +24,7 @@ test_query = {
 
 @app.route("/")
 def hello():
-    search_results = yelp_api.search_query(latitude=my_lat, longitude=my_long, term="restaurants", limit=1)
+    search_results = yelp_api.search_query(latitude=my_lat, longitude=my_long, term="restaurants")
     return str(search_results)
 
 @app.route("/<q>", methods=['GET'])

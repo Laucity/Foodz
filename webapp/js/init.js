@@ -80,39 +80,38 @@ Vue.component('preference', {
 Vue.component('card', {
     template: `
 
-    <div class="card small">
-        <div class="card-image">
-            <img :src="image_url">
-            <span class="card-title"></span>
+        <div class="card small">
+            <div class="card-image">
+                <img :src="image_url">
+                <span class="card-title"></span>
+            </div>
+            <div class="card-content">
+                <p>{{ name }}</p>
+            </div>
+            <div class="card-action">
+                <a href="#">{{ rating }}</a>
+            </div>
         </div>
-        <div class="card-content">
-            <p>{{ name }}</p>
-        </div>
-        <div class="card-action">
-            <a href="#">{{ rating }}</a>
-        </div>
-    </div>
 
     `,
-
-    data: () => {
-        return {
-            image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/XwiV9HD8LRciCYCANDsUbA/o.jpg",
-            name: "OMG RESTAURANT",
-            rating: 3
-        }
-    }
+    props: ['image_url', 'name', 'rating']
 })
 
 Vue.component('results', {
     template: `
 
-      <div class="col s4">
-        <card></card>
-      
-      </div>
+        <div>
+          <div class="col s4" v-for="i in 4">
+            <card
+                v-bind:image_url="businesses[i-1].image_url"
+                v-bind:name="businesses[i-1].name"
+                v-bind:rating="businesses[i-1].rating">
+            </card>
+          </div>
+        </div>
 
-    `
+    `,
+    props: ['businesses']
 })
 
 Vue.component('main-view', {
@@ -121,11 +120,12 @@ Vue.component('main-view', {
     <div class="container">
         <div class="row">
             <preference></preference>
-            <results></results>
+            <results v-bind:businesses="businesses"></results>
         </div>
     </div>
 
-    `
+    `,
+    props: ['businesses']
 })
 
 Vue.component('app', {
@@ -133,15 +133,24 @@ Vue.component('app', {
   
     <div>
       <navbar></navbar>
-      <main-view></main-view>
+      <main-view v-bind:businesses="businesses"></main-view>
     </div>
   
-    `
+    `,
+    props: ['businesses']
 })
 
 // create a root instance
-new Vue({
-  el: '#root'
+
+const v = new Vue({
+  el: '#root',
+  data: {
+    businesses: [{
+        image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/XwiV9HD8LRciCYCANDsUbA/o.jpg",
+        name: "OMG RESTAURANT",
+        rating: 3
+    }]
+  }
 })
 
 function queryServer(q) {
@@ -150,17 +159,9 @@ function queryServer(q) {
     $.get(server_url, {query: JSON.stringify(q)}, function (response, status) {
         if (status === "success") {
             console.log(response);
+            v.businesses = response.businesses;
 
-            var businesses = response.businesses;
-
-            $("#food_col_1").empty();
-            $("#food_col_2").empty();
-
-            $("#food_col_1").append(buildCard(businesses[0]));
-            $("#food_col_1").append(buildCard(businesses[1]));
-            $("#food_col_2").append(buildCard(businesses[3]));
-            $("#food_col_2").append(buildCard(businesses[2]));
-
+            // update result cards
 
         } else {
             console.log("FAILED SERVER REQUEST")
@@ -190,7 +191,6 @@ $(document).ready(function() {
     }
     navigator.geolocation.getCurrentPosition(savePosition);
 
-    console.log("BOY");
     queryServer(query);
 
     var cuisine_options = {
