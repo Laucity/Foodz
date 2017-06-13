@@ -9,27 +9,27 @@
 Vue.component('navbar', {
     template: `
 
-      <nav class="white" role="navigation">
+    <nav class="white" role="navigation">
         <div class="nav-wrapper container">
-          <a id="logo-container" href="#" class="brand-logo">Pulp</a>
-          <ul class="right hide-on-med-and-down">
-            <li><a id="contact-link" href="#">Settings</a></li>
-          </ul>
+            <a id="logo-container" href="#" class="brand-logo">Pulp</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a id="contact-link" href="#">Settings</a></li>
+            </ul>
 
 
-          <ul id="nav-mobile" class="side-nav">
-            <li><a id="contact-link-side" href="#">Settings</a></li>
-          </ul>
-          <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="side-nav">
+                <li><a id="contact-link-side" href="#">Settings</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         </div>
-      </nav>
+    </nav>
     `
 })
 
 Vue.component('preference', {
     template: `
 
-      <div id='preferences' class="col s4">
+    <div id='preferences' class="col s4">
 
         <br>
         <h5>I want</h5>
@@ -37,61 +37,60 @@ Vue.component('preference', {
 
         <h5>I don't want</h5>
         <div id='blist' class="chips chips-blist"></div>
-
         <br>
 
         <!-- PRICE -->
         <div id='price'>
-          <p>
-            <input type="checkbox" id="1" checked="checked" />
-            <label for="1">$</label>
-          </p>
-          <p>
-            <input type="checkbox" id="2" checked="checked" />
-            <label for="2">$$</label>
-          </p>
-          <p>
-            <input type="checkbox" id="3" checked="checked" />
-            <label for="3">$$$</label>
-          </p>
-          <p>
-            <input type="checkbox" id="4" checked="checked" />
-            <label for="4">$$$$</label>
-          </p>
+            <p>
+                <input type="checkbox" id="1" checked="checked" />
+                <label for="1">$</label>
+            </p>
+            <p>
+                <input type="checkbox" id="2" checked="checked" />
+                <label for="2">$$</label>
+            </p>
+            <p>
+                <input type="checkbox" id="3" checked="checked" />
+                <label for="3">$$$</label>
+            </p>
+            <p>
+                <input type="checkbox" id="4" checked="checked" />
+                <label for="4">$$$$</label>
+            </p>
         </div>
 
         <br>
 
         <!-- WALKING DISTANCE -->
         <div class="switch">
-          <label>
-            
-            <input id="walk" type="checkbox">
-            <span class="lever"></span>
-            Within walking distance
-          </label>
+            <label>
+                <input id="walk" type="checkbox">
+                <span class="lever"></span>
+                Within walking distance
+            </label>
         </div>
       
-      </div>
+    </div>
 
     `
 })
 
 Vue.component('card', {
+    // add yes / no
     template: `
 
-        <div class="card small">
-            <div class="card-image">
-                <img :src="image_url">
-                <span class="card-title"></span>
-            </div>
-            <div class="card-content">
-                <p>{{ name }}</p>
-            </div>
-            <div class="card-action">
-                <a href="#">{{ rating }}</a>
-            </div>
+    <div class="card small">
+        <div class="card-image">
+            <img :src="image_url">
+            <span class="card-title"></span>
         </div>
+        <div class="card-content">
+            <p>{{ name }}</p>
+        </div>
+        <div class="card-action">
+            <a href="#">{{ rating }}</a>
+        </div>
+    </div>
 
     `,
     props: ['image_url', 'name', 'rating']
@@ -100,16 +99,15 @@ Vue.component('card', {
 Vue.component('results', {
     template: `
 
-        <div>
-          <div class="col s4" v-for="i in 4">
+    <div>
+        <div class="col s4" v-for="i in 4">
             <card
                 v-bind:image_url="businesses[i-1].image_url"
                 v-bind:name="businesses[i-1].name"
                 v-bind:rating="businesses[i-1].rating">
             </card>
-          </div>
         </div>
-
+    </div>
     `,
     props: ['businesses']
 })
@@ -143,8 +141,8 @@ Vue.component('app', {
 // create a root instance
 
 const v = new Vue({
-  el: '#root',
-  data: {
+    el: '#root',
+    data: {
     businesses: [{
         image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/XwiV9HD8LRciCYCANDsUbA/o.jpg",
         name: "OMG RESTAURANT",
@@ -155,13 +153,15 @@ const v = new Vue({
 
 function queryServer(q) {
     var server_url = 'http://127.0.0.1:5000/query';
+
+    console.log(q);
     // send query
     $.get(server_url, {query: JSON.stringify(q)}, function (response, status) {
         if (status === "success") {
             console.log(response);
-            v.businesses = response.businesses;
 
             // update result cards
+            v.businesses = response.businesses;
 
         } else {
             console.log("FAILED SERVER REQUEST")
@@ -223,16 +223,14 @@ $(document).ready(function() {
     });
 
     $('.chips-wlist').on('chip.add', function(e, chip){
-        console.log("ADDED LIKE");
-        console.log(chip);
         query.like.push(chip.tag);
-        console.log(query);
         queryServer(query);
     });
 
     $('.chips-wlist').on('chip.delete', function(e, chip){
         query.like.splice(query.like.indexOf(chip.tag), 1);
         queryServer(query);
+        // add filter on v.businesses
     });
 
     $('.chips-blist').on('chip.add', function(e, chip){
@@ -257,8 +255,6 @@ $(document).ready(function() {
             query.price.splice(query.price.indexOf(e.originalEvent.target.id), 1);
         }
         console.log(e.originalEvent.target.checked);
-        console.log(query);
-
         queryServer(query);
     });
 
