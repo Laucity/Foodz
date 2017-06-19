@@ -55,6 +55,25 @@ p {
   font-size: inherit;
 }
 
+.img-full {
+  max-height: 100% !important;
+}
+
+.zero-top {
+  top: 0;
+}
+
+.shader {
+  background: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.3;
+}
+
+
 footer.page-footer {
   margin: 0;
 }

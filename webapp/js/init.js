@@ -75,36 +75,69 @@ Vue.component('preference', {
     `
 })
 
+Vue.component('modal', {
+    template: `
+
+    <div :id=" 'modal' + index.toString() " class="modal">
+        <div class="modal-content">
+            <h4>{{ business.name }}</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
+    `,
+    props: ['business', 'index']
+})
+
 Vue.component('card', {
 
     template: `
 
     <div class="card small">
-        <div class="card-image">
+        <div class="card-image img-full">
             <img :src="business.image_url">
-            <span class="card-title"></span>
-        </div>
-        <div class="card-content">
-            <p>{{ business.name }}</p>
+            <div class="shader"></div>
+            <span class="card-title zero-top">{{ business.name }}</span>
         </div>
         <div class="card-action">
             <a href="#">{{ business.rating }}</a>
             <div class="right">
-                <a href='#' class='btn' v-on:click="acceptRestaurant">Yes</a>
-                <a href='#' class='btn' v-on:click="rejectRestaurant">No</a>
+                <a href='#!' class='btn' v-on:click="infoRestaurant">Info</a>
+                <a href='#!' class='btn' v-on:click="rejectRestaurant">No</a>
             </div>
         </div>
+        <modal 
+            v-bind:business="business"
+            v-bind:index="index">
+        </modal>
     </div>
 
     `,
     props: ['business', 'index'],
+    mounted: function () {
+        $('.modal').modal({
+            dismissible: true, // can be closed by clicking outside the modal
+            opacity: .5, // Opacity of modal background
+            inDuration: 300, // Transition in duration
+            outDuration: 200, // Transition out duration
+            startingTop: '4%', // Starting top style attribute
+            endingTop: '10%', // Ending top style attribute
+            ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                console.log(modal, trigger);
+            },
+            complete: function() { 
+                console.log('asdf');
+            } // Callback for Modal close
+        });
+    },
     methods: {
         rejectRestaurant: function() {
 
             let index = this.$options.propsData.index
             
             console.log(this);
-            console.log(this.$options.propsData);
 
             if (v.businesses.length > 4) {
                 // save one we delete or something var rejected = v.businesses[index]
@@ -115,16 +148,17 @@ Vue.component('card', {
             }
 
         },
-        acceptRestaurant: function() {
+        infoRestaurant: function() {
             console.log(this);
-            console.log("accept");
+            console.log("info");
+            let index = this.$options.propsData.index
+            let modal_id = "#modal" + index.toString();
+            console.log(modal_id);
+            $(modal_id).modal('open');
         }
     }
 
 })
-
-
-
 
 Vue.component('results', {
     template: `
