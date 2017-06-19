@@ -31,8 +31,8 @@ def hello():
 def query(q):
 
 	query = json.loads(request.args.get('query'))
+	print("QUERY")
 	print(query)
-
 
 	q = query #json.loads(q)
 	results = yelp_api.search_query(latitude=q['lat'], 
@@ -41,7 +41,16 @@ def query(q):
 									open_now=q['open_now'],
 									term='restaurants',
 									categories=",".join(q['like']),
+									limit=10
 									)
+	# pull extra business data
+	businesses = results['businesses']
+	for business in businesses:
+		b_id = business['id']
+		extra_info = yelp_api.business_query(id=b_id)
+
+		business['extra_details'] = extra_info
+
 	response = jsonify(results)
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	return response

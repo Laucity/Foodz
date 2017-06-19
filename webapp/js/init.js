@@ -75,6 +75,30 @@ Vue.component('preference', {
     `
 })
 
+Vue.component('carousel', {
+    template: `
+
+    <div class="carousel carousel-slider center height-250" data-indicators="true">
+        <div class="carousel-fixed-item center">
+          <a class="btn waves-effect white grey-text darken-text-2">button</a>
+        </div>
+        
+        <div class="carousel-item red white-text">
+          <h2>First Panel</h2>
+          <p class="white-text">This is your first panel</p>
+        </div>
+        
+
+        <div class="carousel-item" v-for="i in business.extra_details.photos.length-1">
+            <img :src="business.extra_details.photos[i]">
+        </div>
+
+
+    </div>
+    `,
+    props: ['business', 'index']
+})
+
 Vue.component('modal', {
     template: `
 
@@ -82,9 +106,13 @@ Vue.component('modal', {
         <div class="modal-content">
             <h4>{{ business.name }}</h4>
             <p>A bunch of text</p>
+            <carousel
+                v-bind:business="business"
+                v-bind:index="index">
+            </carousel>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
         </div>
     </div>
     `,
@@ -131,6 +159,8 @@ Vue.component('card', {
                 console.log('asdf');
             } // Callback for Modal close
         });
+
+        $('.carousel.carousel-slider').carousel({fullWidth: true});
     },
     methods: {
         rejectRestaurant: function() {
@@ -148,12 +178,15 @@ Vue.component('card', {
             }
 
         },
+
         infoRestaurant: function() {
+
             console.log(this);
             console.log("info");
+
             let index = this.$options.propsData.index
             let modal_id = "#modal" + index.toString();
-            console.log(modal_id);
+
             $(modal_id).modal('open');
         }
     }

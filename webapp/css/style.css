@@ -73,6 +73,9 @@ p {
   opacity: 0.3;
 }
 
+.height-250 {
+  height: 250px !important;
+}
 
 footer.page-footer {
   margin: 0;
