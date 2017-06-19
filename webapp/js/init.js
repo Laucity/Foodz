@@ -71,7 +71,6 @@ Vue.component('preference', {
         </div>
       
     </div>
-
     `
 })
 
@@ -84,8 +83,12 @@ Vue.component('carousel', {
         </div>
         
         <div class="carousel-item red white-text">
-          <h2>First Panel</h2>
+          <h2>Description Panel</h2>
           <p class="white-text">This is your first panel</p>
+        </div>
+
+        <div class="carousel-item">
+            <img :src="business.image_url">
         </div>
         
 
@@ -141,7 +144,6 @@ Vue.component('card', {
             v-bind:index="index">
         </modal>
     </div>
-
     `,
     props: ['business', 'index'],
     mounted: function () {

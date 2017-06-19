@@ -4,23 +4,36 @@ from key import *
 app = Flask(__name__)
 
 import json
+import threading
 
 from yelpapi import YelpAPI
 yelp_api = YelpAPI(FUSION_ID, FUSION_KEY)
-
-
-my_lat = "37.868654"
-my_long = "-122.259153"
 
 test_query = {
 				'like': ['thai', 'japanese', 'chinese'],
 				'dislike': ['italian', 'french'],
 				'price': '2,3',
 				'open_now': 1,
-				'lat': my_lat,
-				'long': my_long,
+				'lat': "37.868654",
+				'long': "-122.259153",
 				'sort_by': 'rating'
 			 }
+
+# Thread Class for async requests
+class bThread (threading.Thread):
+   def __init__(self, threadID, business):
+      threading.Thread.__init__(self)
+      self.threadID = threadID
+      self.business = business
+
+   def run(self):
+      print ("Starting " + str(self.threadID))
+      
+      extra_details = yelp_api.business_query(id=self.business['id'])
+      self.business['extra_details'] = extra_details
+
+      print ("Exiting " + str(self.threadID))
+
 
 @app.route("/")
 def hello():
@@ -45,11 +58,22 @@ def query(q):
 									)
 	# pull extra business data
 	businesses = results['businesses']
-	for business in businesses:
-		b_id = business['id']
-		extra_info = yelp_api.business_query(id=b_id)
+	# for business in businesses:
+	# 	b_id = business['id']
+	# 	extra_info = yelp_api.business_query(id=b_id)
 
-		business['extra_details'] = extra_info
+	# 	business['extra_details'] = extra_info
+
+	threads = []
+	for i, business in enumerate(businesses):
+		new_t = bThread(i, business)
+		new_t.start()
+		threads.append(new_t)
+
+	for t in threads:
+		t.join()
+
+	print("All threads complete")
 
 	response = jsonify(results)
 	response.headers.add('Access-Control-Allow-Origin', '*')
