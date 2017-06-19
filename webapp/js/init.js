@@ -76,35 +76,64 @@ Vue.component('preference', {
 })
 
 Vue.component('card', {
-    // add yes / no
+
     template: `
 
     <div class="card small">
         <div class="card-image">
-            <img :src="image_url">
+            <img :src="business.image_url">
             <span class="card-title"></span>
         </div>
         <div class="card-content">
-            <p>{{ name }}</p>
+            <p>{{ business.name }}</p>
         </div>
         <div class="card-action">
-            <a href="#">{{ rating }}</a>
+            <a href="#">{{ business.rating }}</a>
+            <div class="right">
+                <a href='#' class='btn' v-on:click="acceptRestaurant">Yes</a>
+                <a href='#' class='btn' v-on:click="rejectRestaurant">No</a>
+            </div>
         </div>
     </div>
 
     `,
-    props: ['image_url', 'name', 'rating']
+    props: ['business', 'index'],
+    methods: {
+        rejectRestaurant: function() {
+
+            let index = this.$options.propsData.index
+            
+            console.log(this);
+            console.log(this.$options.propsData);
+
+            if (v.businesses.length > 4) {
+                // save one we delete or something var rejected = v.businesses[index]
+                let newBusiness = v.businesses.splice(4, 1)[0];
+                v.businesses[index] = newBusiness
+            } else {
+                v.businesses.splice(index, 1);
+            }
+
+        },
+        acceptRestaurant: function() {
+            console.log(this);
+            console.log("accept");
+        }
+    }
+
 })
+
+
+
 
 Vue.component('results', {
     template: `
 
     <div>
-        <div class="col s4" v-for="i in 4">
+        <div class="col s4" v-for="i in Math.min(businesses.length, 4)">
             <card
-                v-bind:image_url="businesses[i-1].image_url"
-                v-bind:name="businesses[i-1].name"
-                v-bind:rating="businesses[i-1].rating">
+                v-bind:business="businesses[i-1]"
+                v-bind:index="i-1">
             </card>
         </div>
     </div>
@@ -143,12 +172,8 @@ Vue.component('app', {
 const v = new Vue({
     el: '#root',
     data: {
-    businesses: [{
-        image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/XwiV9HD8LRciCYCANDsUbA/o.jpg",
-        name: "OMG RESTAURANT",
-        rating: 3
-    }]
-  }
+        businesses: []
+    },
 })
 
 function queryServer(q) {
