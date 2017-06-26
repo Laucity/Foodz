@@ -6,6 +6,42 @@
     }); // end of document ready
 })(jQuery); // end of jQuery name space
 
+// Functions
+function queryServer(q) {
+    let server_url = 'http://127.0.0.1:5000/query';
+
+    console.log(q);
+    // send query
+    $.get(server_url, {query: JSON.stringify(q)}, function (response, status) {
+        if (status === "success") {
+
+            // update result cards
+            v.businesses = response.businesses;
+
+        } else {
+            console.log("FAILED SERVER REQUEST");
+        }
+        console.log(response);
+
+    }, 'json');
+}
+
+function sendPreference(p) {
+    let pref_url = 'http://127.0.0.1:5000/pref/preference';
+
+    console.log(p)
+    // send preference
+    $.get(pref_url, {preference: JSON.stringify(p)}, function (response, status) {
+        if (status === "success") {
+            console.log("SENT SUCCESSFULLY")
+
+        } else {
+            console.log("FAILED POST REQUEST");
+        }
+        console.log(response);
+    }, 'json');
+}
+
 Vue.component('navbar', {
     template: `
 
@@ -169,16 +205,25 @@ Vue.component('card', {
 
             let index = this.$options.propsData.index
             
-            console.log(this);
+            // save one we delete
+            let rejected = v.businesses[index]
 
             if (v.businesses.length > 4) {
-                // save one we delete or something var rejected = v.businesses[index]
+                // get the new business
                 let newBusiness = v.businesses.splice(4, 1)[0];
+
+                // replace the business
                 v.businesses[index] = newBusiness
+
+
             } else {
+                // remove the business
                 v.businesses.splice(index, 1);
             }
 
+            // send the rejected business to the server as preference a data point
+            console.log("REJECTED")
+            sendPreference(rejected);
         },
 
         infoRestaurant: function() {
@@ -192,7 +237,6 @@ Vue.component('card', {
             $(modal_id).modal('open');
         }
     }
-
 })
 
 Vue.component('results', {
@@ -244,25 +288,6 @@ const v = new Vue({
         businesses: []
     },
 })
-
-function queryServer(q) {
-    var server_url = 'http://127.0.0.1:5000/query';
-
-    console.log(q);
-    // send query
-    $.get(server_url, {query: JSON.stringify(q)}, function (response, status) {
-        if (status === "success") {
-            console.log(response);
-
-            // update result cards
-            v.businesses = response.businesses;
-
-        } else {
-            console.log("FAILED SERVER REQUEST")
-            console.log(response);
-        }
-    }, 'json');
-}
 
 $(document).ready(function() {
 	

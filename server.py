@@ -79,6 +79,19 @@ def query(q):
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	return response
 
+@app.route("/pref/<p>", methods=['GET'])
+def pref(p):
+
+	# print(request)
+	print(request.args)
+
+	preference = json.loads(request.args.get('preference'))
+	print("preference")
+	print(preference)
+
+	response = jsonify(preference)
+	response.headers.add('Access-Control-Allow-Origin', '*')
+	return response
 
 if __name__ == "__main__":
     app.run()
