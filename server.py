@@ -3,21 +3,20 @@ from flask import Flask, jsonify, request
 from key import *
 app = Flask(__name__)
 
+# Helper modules
 import json
 import threading
+import numpy as np
 
+# YELP FUSION API 
 from yelpapi import YelpAPI
 yelp_api = YelpAPI(FUSION_ID, FUSION_KEY)
 
-test_query = {
-				'like': ['thai', 'japanese', 'chinese'],
-				'dislike': ['italian', 'french'],
-				'price': '2,3',
-				'open_now': 1,
-				'lat': "37.868654",
-				'long': "-122.259153",
-				'sort_by': 'rating'
-			 }
+# LOAD IN RESTAURANT CATEGORIES
+R_CATEGORIES = json.loads(open("r_categories", "r").read())
+CATEGORY_ALIAS_ENCODING = {}
+for i, R_CAT in enumerate(R_CATEGORIES):
+	CATEGORY_ALIAS_ENCODING[R_CAT['alias']] = i
 
 # Thread Class for async requests
 class bThread (threading.Thread):
@@ -34,6 +33,30 @@ class bThread (threading.Thread):
 
       print ("Exiting " + str(self.threadID))
 
+
+# FEAURE VECTOR CREATION
+def encode_business_categories(business):
+	
+	f_vector = np.zeros(len(R_CATEGORIES))
+
+	categories = business['categories']
+	indices = [CATEGORY_ALIAS_ENCODING[c['alias']] for c in categories]
+
+	# one hot encoding
+	f_vector[indices] = 1
+
+	return f_vector
+
+# Query format
+# test_query = {
+# 				'like': ['thai', 'japanese', 'chinese'],
+# 				'dislike': ['italian', 'french'],
+# 				'price': '2,3',
+# 				'open_now': 1,
+# 				'lat': "37.868654",
+# 				'long': "-122.259153",
+# 				'sort_by': 'rating'
+# 			 }
 
 @app.route("/")
 def hello():
