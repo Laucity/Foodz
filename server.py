@@ -7,16 +7,29 @@ app = Flask(__name__)
 import json
 import threading
 import numpy as np
+import scipy.io as sio
 
 # YELP FUSION API 
 from yelpapi import YelpAPI
 yelp_api = YelpAPI(FUSION_ID, FUSION_KEY)
 
 # LOAD IN RESTAURANT CATEGORIES
-R_CATEGORIES = json.loads(open("r_categories", "r").read())
+R_CATEGORIES = json.loads(open("r_categories.json", "r").read())
 CATEGORY_ALIAS_ENCODING = {}
 for i, R_CAT in enumerate(R_CATEGORIES):
 	CATEGORY_ALIAS_ENCODING[R_CAT['alias']] = i
+
+# LOAD IN PREFERENCES MAT
+PREF_FILENAME = "preferences.mat"
+def load_preference_mat():
+	# Returns none if no file exists
+	try:
+		PREF_FILE = sio.loadmat(PREF_FILENAME)
+	except:
+		PREF_FILE = None
+		print("No mat file exists")
+
+	return PREF_FILE
 
 # Thread Class for async requests
 class bThread (threading.Thread):
@@ -40,7 +53,15 @@ def encode_business_categories(business):
 	f_vector = np.zeros(len(R_CATEGORIES))
 
 	categories = business['categories']
-	indices = [CATEGORY_ALIAS_ENCODING[c['alias']] for c in categories]
+
+	indices = []
+	for c in categories:
+		try:
+			i = CATEGORY_ALIAS_ENCODING[c['alias']]
+			indices.append(i)
+		except:
+			print("CATEGORY NOT FOUND")
+			print(c['alias'])
 
 	# one hot encoding
 	f_vector[indices] = 1
@@ -106,13 +127,40 @@ def query(q):
 def pref(p):
 
 	# print(request)
-	print(request.args)
+	# print(request.args)
 
 	preference = json.loads(request.args.get('preference'))
-	print("preference")
-	print(preference)
+	score = json.loads(request.args.get('score'))
+	# print("preference, score")
+	# print(preference, score)
 
-	response = jsonify(preference)
+	# Add to the preference matrix
+	encoded_preference = encode_business_categories(preference)
+
+	pref_file = load_preference_mat()
+
+	if pref_file is not None:
+		preferences = pref_file["preferences"]
+		scores = pref_file["scores"]
+
+		preferences = np.append(preferences, [encoded_preference], axis=0)
+		scores = np.append(scores, score)
+
+	else:
+		preferences = np.array([encoded_preference])
+		scores = np.array([score])
+
+	# save mat with new preference
+
+	assert(len(preferences) == len(scores))
+	mat_dict = {
+				"preferences": preferences, 
+				"scores": scores
+				}
+	sio.savemat(PREF_FILENAME, mat_dict)
+
+	# Acknowledge preference to client
+	response = jsonify(["preference noted"])
 	response.headers.add('Access-Control-Allow-Origin', '*')
 	return response
 

@@ -26,12 +26,12 @@ function queryServer(q) {
     }, 'json');
 }
 
-function sendPreference(p) {
+function sendPreference(p, score) {
     let pref_url = 'http://127.0.0.1:5000/pref/preference';
 
     console.log(p)
     // send preference
-    $.get(pref_url, {preference: JSON.stringify(p)}, function (response, status) {
+    $.get(pref_url, {preference: JSON.stringify(p), score: score}, function (response, status) {
         if (status === "success") {
             console.log("SENT SUCCESSFULLY")
 
@@ -223,7 +223,7 @@ Vue.component('card', {
 
             // send the rejected business to the server as preference a data point
             console.log("REJECTED")
-            sendPreference(rejected);
+            sendPreference(rejected, -1);
         },
 
         infoRestaurant: function() {
