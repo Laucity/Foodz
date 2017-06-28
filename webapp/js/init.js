@@ -7,12 +7,12 @@
 })(jQuery); // end of jQuery name space
 
 // Functions
-function queryServer(q) {
+function queryServer(query) {
     let server_url = 'http://127.0.0.1:5000/query';
 
-    console.log(q);
+    console.log(query);
     // send query
-    $.get(server_url, {query: JSON.stringify(q)}, function (response, status) {
+    $.get(server_url, {query: JSON.stringify(query)}, function (response, status) {
         if (status === "success") {
 
             // update result cards
@@ -26,12 +26,12 @@ function queryServer(q) {
     }, 'json');
 }
 
-function sendPreference(p, score) {
+function sendPreference(business, score) {
     let pref_url = 'http://127.0.0.1:5000/pref/preference';
 
-    console.log(p)
+    console.log(business)
     // send preference
-    $.get(pref_url, {preference: JSON.stringify(p), score: score}, function (response, status) {
+    $.get(pref_url, {business: JSON.stringify(business), score: score}, function (response, status) {
         if (status === "success") {
             console.log("SENT SUCCESSFULLY")
 
@@ -151,11 +151,20 @@ Vue.component('modal', {
             </carousel>
         </div>
         <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" v-on:click="likeRestaurant">Like</a>
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
         </div>
     </div>
     `,
-    props: ['business', 'index']
+    props: ['business', 'index'],
+    methods: {
+        likeRestaurant: function() {
+            let index = this.$options.propsData.index;
+            let liked_business = v.businesses[index];
+            sendPreference(liked_business, 1);
+            console.log("LIKED");
+        }
+    }
 })
 
 Vue.component('card', {
@@ -194,7 +203,7 @@ Vue.component('card', {
                 console.log(modal, trigger);
             },
             complete: function() { 
-                console.log('asdf');
+                console.log('completed modal');
             } // Callback for Modal close
         });
 
@@ -227,9 +236,6 @@ Vue.component('card', {
         },
 
         infoRestaurant: function() {
-
-            console.log(this);
-            console.log("info");
 
             let index = this.$options.propsData.index
             let modal_id = "#modal" + index.toString();

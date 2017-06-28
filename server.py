@@ -46,9 +46,10 @@ class bThread (threading.Thread):
 
       print ("Exiting " + str(self.threadID))
 
-
 # FEAURE VECTOR CREATION
-def encode_business_categories(business):
+def encode_business(business):
+
+	# Turn a business into a feature vector
 	
 	f_vector = np.zeros(len(R_CATEGORIES))
 
@@ -102,11 +103,19 @@ def query(q):
 									)
 	# pull extra business data
 	businesses = results['businesses']
+
+	# OLD
 	# for business in businesses:
 	# 	b_id = business['id']
 	# 	extra_info = yelp_api.business_query(id=b_id)
-
 	# 	business['extra_details'] = extra_info
+
+	# WITH LFA
+	# PUll 50 businesses from the query
+	# check if they have been encoded
+	# encode those that have not been
+	# rescore all the restaurants
+	# sort them
 
 	threads = []
 	for i, business in enumerate(businesses):
@@ -125,36 +134,31 @@ def query(q):
 
 @app.route("/pref/<p>", methods=['GET'])
 def pref(p):
+	# Handle preference sent to server
 
-	# print(request)
-	# print(request.args)
-
-	preference = json.loads(request.args.get('preference'))
+	business = json.loads(request.args.get('business'))
 	score = json.loads(request.args.get('score'))
-	# print("preference, score")
-	# print(preference, score)
 
 	# Add to the preference matrix
-	encoded_preference = encode_business_categories(preference)
+	encoded_business = encode_business(business)
 
 	pref_file = load_preference_mat()
 
 	if pref_file is not None:
-		preferences = pref_file["preferences"]
+		businesses = pref_file["businesses"]
 		scores = pref_file["scores"]
 
-		preferences = np.append(preferences, [encoded_preference], axis=0)
+		businesses = np.append(businesses, [encoded_business], axis=0)
 		scores = np.append(scores, score)
 
 	else:
-		preferences = np.array([encoded_preference])
+		businesses = np.array([encoded_business])
 		scores = np.array([score])
 
 	# save mat with new preference
-
-	assert(len(preferences) == len(scores))
+	assert(len(businesses) == len(scores))
 	mat_dict = {
-				"preferences": preferences, 
+				"businesses": businesses, 
 				"scores": scores
 				}
 	sio.savemat(PREF_FILENAME, mat_dict)
