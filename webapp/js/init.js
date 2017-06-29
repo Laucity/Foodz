@@ -309,6 +309,7 @@ $(document).ready(function() {
         query.lat = position.coords.latitude;
         query.long = position.coords.longitude;
     }
+    
     navigator.geolocation.getCurrentPosition(savePosition);
 
     queryServer(query);
