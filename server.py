@@ -81,6 +81,19 @@ def encode_business(business):
 
     return f_vector
 
+# CHECK IF BUSINESS CONTAINS CATEGORY(IES)
+def check_category(business, category_alias):
+    categories = business['categories']
+    aliases = set([c['alias'] for c in categories])
+    return category_alias in aliases
+
+def check_categories(business, category_aliases):
+    # returns if any of the categories appears in a business
+    categories = business['categories']
+    aliases = set([c['alias'] for c in categories])
+    category_aliases = set(category_aliases)
+    return len(category_aliases & aliases)
+
 # Query format
 # test_query = {
 #               'like': ['thai', 'japanese', 'chinese'],
@@ -113,8 +126,13 @@ def query(q):
                                     categories=",".join(q['like']),
                                     limit=25
                                     )
+    
     # pull extra business data
     result_businesses = results['businesses']
+
+    # remove any restaurants that are disliked by the query
+    dislikes = q['dislike']
+    result_businesses = list(filter(lambda x: check_categories(x, dislikes)== 0 , result_businesses))
 
     # OLD
     # for business in businesses:
@@ -172,8 +190,8 @@ def query(q):
         t.join()
 
     print("All threads complete")
-
-    response = jsonify(results) # CHANGE
+    results['businesses'] = sorted_results
+    response = jsonify(results)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
