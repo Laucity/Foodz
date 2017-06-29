@@ -45,11 +45,11 @@ function sendPreference(business, score) {
 Vue.component('navbar', {
     template: `
 
-    <nav class="white" role="navigation">
+    <nav class="red lighten-1" role="navigation">
         <div class="nav-wrapper container">
-            <a id="logo-container" href="#" class="brand-logo">Pulp</a>
+            <a id="logo-container" href="#" class="brand-logo white-text">Pulp</a>
             <ul class="right hide-on-med-and-down">
-                <li><a id="contact-link" href="#">Settings</a></li>
+                <li><a id="contact-link" href="#" class="white-text">Settings</a></li>
             </ul>
 
 
@@ -115,7 +115,7 @@ Vue.component('carousel', {
 
     <div class="carousel carousel-slider center height-250" data-indicators="true">
         <div class="carousel-fixed-item center">
-          <a class="btn waves-effect green white-text darken-text-2" v-on:click="likeRestaurant">Like</a>
+          <a class="btn waves-effect green lighten-1 white-text darken-text-2" v-on:click="likeRestaurant">Like</a>
         </div>
 
         <div class="carousel-item">
@@ -273,6 +273,7 @@ Vue.component('app', {
   
     <div>
       <navbar></navbar>
+      <br></br>
       <main-view v-bind:businesses="businesses"></main-view>
     </div>
   
