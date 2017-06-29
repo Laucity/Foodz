@@ -111,7 +111,7 @@ def query(q):
                                     open_now=q['open_now'],
                                     term='restaurants',
                                     categories=",".join(q['like']),
-                                    limit=10
+                                    limit=25
                                     )
     # pull extra business data
     result_businesses = results['businesses']
@@ -141,7 +141,7 @@ def query(q):
             scores = np.append(scores, 0)
 
         user_matrix = np.c_[businesses, scores]
-        LFA_matrix = reconstruct(user_matrix, None) # rank = None for TESTING
+        LFA_matrix = reconstruct(user_matrix, 10) # rank = None for TESTING without LFA
 
         results_start_index = len(businesses) - len(result_businesses)
 
