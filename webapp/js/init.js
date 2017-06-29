@@ -115,12 +115,7 @@ Vue.component('carousel', {
 
     <div class="carousel carousel-slider center height-250" data-indicators="true">
         <div class="carousel-fixed-item center">
-          <a class="btn waves-effect white grey-text darken-text-2">button</a>
-        </div>
-        
-        <div class="carousel-item red white-text">
-          <h2>Description Panel</h2>
-          <p class="white-text">This is your first panel</p>
+          <a class="btn waves-effect green white-text darken-text-2" v-on:click="likeRestaurant">Like</a>
         </div>
 
         <div class="carousel-item">
@@ -135,7 +130,15 @@ Vue.component('carousel', {
 
     </div>
     `,
-    props: ['business', 'index']
+    props: ['business', 'index'],
+    methods: {
+        likeRestaurant: function() {
+            let index = this.$options.propsData.index;
+            let liked_business = v.businesses[index];
+            sendPreference(liked_business, 1);
+            console.log("LIKED");
+        }
+    }
 })
 
 Vue.component('modal', {
@@ -151,20 +154,11 @@ Vue.component('modal', {
             </carousel>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" v-on:click="likeRestaurant">Like</a>
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Done</a>
         </div>
     </div>
     `,
-    props: ['business', 'index'],
-    methods: {
-        likeRestaurant: function() {
-            let index = this.$options.propsData.index;
-            let liked_business = v.businesses[index];
-            sendPreference(liked_business, 1);
-            console.log("LIKED");
-        }
-    }
+    props: ['business', 'index']
 })
 
 Vue.component('card', {
