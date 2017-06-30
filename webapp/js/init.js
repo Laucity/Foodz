@@ -56,7 +56,7 @@ Vue.component('navbar', {
             <ul id="nav-mobile" class="side-nav">
                 <li><a id="contact-link-side" href="#">Settings</a></li>
             </ul>
-            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons white-text">menu</i></a>
         </div>
     </nav>
     `
@@ -309,7 +309,7 @@ $(document).ready(function() {
         query.lat = position.coords.latitude;
         query.long = position.coords.longitude;
     }
-    
+
     navigator.geolocation.getCurrentPosition(savePosition);
 
     queryServer(query);

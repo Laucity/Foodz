@@ -63,8 +63,9 @@ class bThread (threading.Thread):
 def encode_business(business):
 
     # Turn a business into a feature vector
-    f_vector = np.zeros(len(R_CATEGORIES))
 
+    # CUISINES AND CATEGORY ENCODING
+    category_vector = np.zeros(len(R_CATEGORIES))
     categories = business['categories']
 
     indices = []
@@ -77,9 +78,9 @@ def encode_business(business):
             print(c['alias'])
 
     # one hot encoding
-    f_vector[indices] = 1
+    category_vector[indices] = 1
 
-    return f_vector
+    return category_vector
 
 # CHECK IF BUSINESS CONTAINS CATEGORY(IES)
 def check_category(business, category_alias):
